@@ -3,7 +3,7 @@ from routes import chat_routes, image_routes, weather_routes, jokes_routes, musi
 
 app = Flask(__name__)
 
-# Registering routes for each feature
+# Registering routes for each feature with URL prefixes
 app.register_blueprint(chat_routes.bp, url_prefix="/chat")
 app.register_blueprint(image_routes.bp, url_prefix="/image")
 app.register_blueprint(weather_routes.bp, url_prefix="/weather")
