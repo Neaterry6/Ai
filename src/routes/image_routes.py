@@ -2,18 +2,23 @@ import cv2
 import numpy as np
 import requests
 from flask import Blueprint, request, jsonify
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
 
 bp = Blueprint("image_routes", __name__)
 
-# Unsplash API Key
-UNSPLASH_API_KEY = "R6_-bAjOS06I89QrCoZ4zgVLEoLjjA3MdltvKuf2uD0"  # Replace with your actual key
+# Unsplash API Key from .env file
+UNSPLASH_API_KEY = os.getenv("UNSPLASH_API_KEY")  # Ensure this key exists in your .env file
 
 # Image Sending Route
 @bp.route("/send", methods=["POST"])
 def send_image():
     data = request.json
-    query = data.get("query", "nature")
-    count = data.get("count", 1)
+    query = data.get("query", "nature")  # Default query is 'nature'
+    count = data.get("count", 1)  # Default count is 1 image
 
     try:
         # Unsplash API request
@@ -21,6 +26,7 @@ def send_image():
         response = requests.get(url)
         response.raise_for_status()
 
+        # Process results
         images = [
             {"url": img["urls"]["full"], "author": img["user"]["name"]}
             for img in response.json().get("results", [])
