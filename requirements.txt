@@ -1,1 +1,9 @@
-
+Flask
+requests
+pyjokes
+Pillow
+pytest
+opencv-python
+beautifulsoup4
+spotipy
+openai
