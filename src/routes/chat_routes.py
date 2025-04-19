@@ -1,5 +1,6 @@
-importimport requests
-from flask import Blueprint, request, jsonify
+import requests
+from flask import Flask, Blueprint, request, jsonify
+from routes import chat_routes, image_routes, weather_routes, jokes_routes, music_routes
 
 bp = Blueprint("chat_routes", __name__)
 
