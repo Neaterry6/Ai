@@ -1,6 +1,10 @@
+importimport requests
 from flask import Blueprint, request, jsonify
 
 bp = Blueprint("chat_routes", __name__)
+
+# Gemini API Key
+GEMINI_API_KEY = "AIzaSyCXZdBeoSqqwJmFJVzGp9YxHsTVGJ52itg"  # Replace with your actual key
 
 @bp.route("/respond", methods=["POST"])
 def chat_respond():
@@ -10,8 +14,18 @@ def chat_respond():
     if not message:
         return jsonify({"error": "Message is required"}), 400
 
-    # Placeholder Gemini AI logic
-    response = {
-        "response": f"Gemini says: '{message}' has been processed!"
-    }
-    return jsonify(response)
+    try:
+        # Send the message to Gemini AI
+        url = "https://api.gemini.ai/v1/chat/respond"  # Replace with the correct Gemini AI endpoint
+        headers = {"Authorization": f"Bearer {GEMINI_API_KEY}"}
+        payload = {"message": message}
+        response = requests.post(url, json=payload, headers=headers)
+
+        if response.status_code == 200:
+            reply = response.json().get("response", "No response from Gemini AI.")
+            return jsonify({"response": reply})
+        else:
+            return jsonify({"error": f"Gemini AI error: {response.status_code}"}), response.status_code
+
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 500 
